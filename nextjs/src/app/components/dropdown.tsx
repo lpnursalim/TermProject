@@ -94,3 +94,5 @@ export const Dropdown: React.FC<DropdownProps> = ({ className }) => {
     </div>
   );
 };
+
+export default Dropdown;

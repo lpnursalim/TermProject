@@ -1,37 +1,38 @@
 import React from "react";
-import { useRouter } from "next/router"; // Import useRouter hook
-import Link from "next/link"; // Import Link component from Next.js
-import filmImage from "../public/images/film.jpeg"; // Single image import
-import styles from "./page.module.css"
+import Link from "next/link"; 
+import Image from "next/image";
+import styles from "./page.module.css";
 
-export const Home = ({ className }) => {
+export default function Home() {
   return (
-    <div className={`landing-home ${className}`}>
-      <div className="film-footer">
-        <img className="film" alt="Film" src={filmImage} />
-        <img className="img" alt="Film" src={filmImage} />
-        <img className="film-2" alt="Film" src={filmImage} />
-      </div>
-      <div className="film-header">
-        <img className="film" alt="Film" src={filmImage} />
-        <img className="img" alt="Film" src={filmImage} />
-        <img className="film-2" alt="Film" src={filmImage} />
-      </div>
-      <p className="text-wrapper">
-        Compare directors, genres and rankings. Get movie recommendations while
-        learning about the people behind the scenes!
-      </p>
-      <div className="overlap-group">
-        <div className="div">Try our</div>
-        <p className="want-to-dig-deep">
-          Want to dig deep into
-          <br />
-          the world of film?
-        </p>
-        <Link href="/welcomePage">
-          <div className="text-wrapper-2">ChatBot!</div>
-        </Link>
-      </div>
-    </div>
+    <div className={styles["landing-home"]}>
+  <div className={styles["film-header"]}>
+    <Image className={styles["film"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
+    <Image className={styles["img"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
+    <Image className={styles["film-2"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
+  </div>
+  <p className={styles["text-wrapper"]}>
+    Compare directors, genres and rankings. Get movie recommendations while
+    learning about the people behind the scenes!
+  </p>
+  <div className={styles["overlap-group"]}>
+    <div className={styles["div"]}>Try our</div>
+    <p className={styles["want-to-dig-deep"]}>
+      Want to dig deep into
+      <br />
+      the world of film?
+    </p>
+    <Link href="/welcomePage">
+      <div className={styles["text-wrapper-2"]}>ChatBot!</div>
+    </Link>
+  </div>
+  <div className={styles["film-footer"]}>
+    <Image className={styles["film"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
+    <Image className={styles["img"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
+    <Image className={styles["film-2"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
+  </div>
+</div>
+
   );
-};
+}
+
