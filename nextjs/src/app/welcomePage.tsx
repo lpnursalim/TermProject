@@ -19,9 +19,4 @@ export default function ChatBot() {
       </div>
       <div className={styles["film-header"]}>
         <Image className={styles["film-3"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
-        <Image className={styles["film-4"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
-        <Image className={styles["film-5"]} alt="Film" src="/images/film.jpeg" width={500} height={500} />
-      </div>
-    </div>
-  );
-}
+        <Image className={styles["film-4"]} alt="Film" src="/images/film.
