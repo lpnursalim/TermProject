@@ -1,0 +1,113 @@
+.landing-home {
+    background-color: #524f87;
+    border: 1px solid;
+    border-color: #000000;
+    box-shadow: 0px 4px 4px #00000040;
+    height: 832px;
+    position: relative;
+    width: 1280px;
+   }
+   .landing-home .film-footer {
+    height: 182px;
+    left: 0;
+    position: absolute;
+    top: 650px;
+    width: 1280px;
+   }
+   .landing-home .film {
+    height: 182px;
+    left: 1258px;
+    position: absolute;
+    top: 0;
+    width: 22px;
+   }
+   .landing-home .img {
+    height: 182px;
+    left: 0;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 629px;
+   }
+   .landing-home .film-2 {
+    height: 182px;
+    left: 629px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 629px;
+   }
+   .landing-home .film-header {
+    height: 182px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 1280px;
+   }
+   .landing-home .text-wrapper {
+    -webkit-text-stroke: 1px #322777;
+    color: #f6e963;
+    font-family: "KyivType Sans-Regular-", Helvetica;
+    font-size: 28px;
+    font-weight: 400;
+    height: 122px;
+    left: 278px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 432px;
+    width: 723px;
+   }
+   .landing-home .overlap-group {
+    height: 212px;
+    left: 189px;
+    position: absolute;
+    top: 220px;
+    width: 897px;
+   }
+   .landing-home .div {
+    -webkit-text-stroke: 1px #322777;
+    color: #f6e963;
+    font-family: "KyivType Sans-Regular-", Helvetica;
+    font-size: 34px;
+    font-weight: 400;
+    height: 64px;
+    left: 240px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 148px;
+    width: 224px;
+   }
+   .landing-home .want-to-dig-deep {
+    -webkit-text-stroke: 3px #312776;
+    color: #f5e962;
+    font-family: "KyivType Sans-Regular-", Helvetica;
+    font-size: 60px;
+    font-weight: 400;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0px 4px 7px #000000;
+    top: 0;
+    width: 897px;
+   }
+   .landing-home .text-wrapper-2 {
+    -webkit-text-stroke: 1px #322777;
+    color: #f6e963;
+    font-family: "KyivType Sans-Bold-", Helvetica;
+    font-size: 34px;
+    font-weight: 700;
+    height: 64px;
+    left: 394px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 148px;
+    width: 232px;
+   }

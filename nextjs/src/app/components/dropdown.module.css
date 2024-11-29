@@ -1,0 +1,73 @@
+/* General Dropdown Styling */
+.dropdown {
+    border-radius: 8px;
+    position: relative;
+    width: 100%; /* Adjust for responsiveness */
+    max-width: 300px; /* Set a max width to control scaling */
+    transition: all 0.3s ease-in-out; /* Smooth state transitions */
+  }
+  
+  /* Button Styles */
+  .dropdown .button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid #0000001a;
+    border-radius: 8px;
+    background-color: #ffffff;
+    cursor: pointer;
+    width: 100%; /* Button scales with container */
+    transition: background-color 0.3s ease;
+  }
+  
+  .dropdown.hover .button {
+    background-color: #f4f3fb;
+  }
+  
+  .dropdown.open .button {
+    background-color: #ffffff;
+  }
+  
+  /* Label Styling */
+  .dropdown .label {
+    font-family: "Fira Sans-Medium", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #5433ff;
+    white-space: nowrap;
+  }
+  
+  /* Icon Styling */
+  .dropdown .icon {
+    height: 18px;
+    width: 18px;
+  }
+  
+  /* List of Items */
+  .dropdown .list-of-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 0;
+    border: 1px solid #0000001a;
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin-top: 4px;
+    width: 100%;
+    z-index: 1000;
+    position: absolute; /* Ensures it overlays content below */
+  }
+  
+  /* Dropdown Option Item Styling */
+  .dropdown .dropdown-option-item-instance {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dropdown .dropdown-option-item-instance:hover {
+    background-color: #f4f3fb;
+  }
+  
