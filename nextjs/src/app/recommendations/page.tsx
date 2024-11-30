@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Dropdown from "../../components/dropdown"; // Dropdown component to select mood
+import Dropdown from "../components/dropdown";
 
 export default function RecommendationPage() {
   const [step, setStep] = useState(1); // To keep track of the current step
@@ -31,7 +31,7 @@ export default function RecommendationPage() {
       Provocative: "Adult",
       Rhythmic: "Music",
       Excited: "Action",
-      Wonderous: "Fantasy",
+      Wondrous: "Fantasy",
       Futuristic: "Sci-Fi",
       Fearful: "Horror",
       Solemn: "War",
@@ -54,7 +54,7 @@ export default function RecommendationPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ genre }),
+        body: JSON.stringify({ queryType: "getDirectorActorCombinations", mood }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch recommendations");
@@ -71,12 +71,18 @@ export default function RecommendationPage() {
   const handleSelectDirector = async (director) => {
     setSelectedDirector(director);
     try {
-      const response = await fetch("/api/director-films", {
+      const response = await fetch("/api/recommendations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ director }),
+        body: JSON.stringify({
+          queryType: "getDirectorMovies",
+          director: {
+            firstName: director.director_fn,
+            lastName: director.director_ln,
+          },
+        }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch films");
@@ -89,15 +95,15 @@ export default function RecommendationPage() {
     }
   };
 
-  // Function to get similar movies
+  // Function to get similar movies by the same director
   const handleGetSimilarMovies = async () => {
     try {
-      const response = await fetch("/api/similar-movies", {
+      const response = await fetch("/api/recommendations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ watchedMovie }),
+        body: JSON.stringify({ queryType: "getSimilarMovies", movie: watchedMovie }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch similar movies");
