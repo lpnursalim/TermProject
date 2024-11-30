@@ -47,7 +47,6 @@
    .landing-home .text-wrapper {
     -webkit-text-stroke: 1px #322777;
     color: #f6e963;
-    font-family: "KyivType Sans-Regular-", Helvetica;
     font-size: 28px;
     font-weight: 400;
     height: 122px;
@@ -69,7 +68,6 @@
    .landing-home .div {
     -webkit-text-stroke: 1px #322777;
     color: #f6e963;
-    font-family: "KyivType Sans-Regular-", Helvetica;
     font-size: 34px;
     font-weight: 400;
     height: 64px;
@@ -84,7 +82,6 @@
    .landing-home .want-to-dig-deep {
     -webkit-text-stroke: 3px #312776;
     color: #f5e962;
-    font-family: "KyivType Sans-Regular-", Helvetica;
     font-size: 60px;
     font-weight: 400;
     left: 0;
@@ -99,7 +96,6 @@
    .landing-home .text-wrapper-2 {
     -webkit-text-stroke: 1px #322777;
     color: #f6e963;
-    font-family: "KyivType Sans-Bold-", Helvetica;
     font-size: 34px;
     font-weight: 700;
     height: 64px;

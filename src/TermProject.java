@@ -11,11 +11,18 @@ public class TermProject {
 
     public static void main(String[] args) {
         String url = "jdbc:mysql://db.relational-data.org:3306/imdb_ijs"; // Update with your database URL
-        String username = "guest"; // Replace with your MySQL username
-        String password = "relational"; // Replace with your MySQL password
+        String username = "root"; // Replace with your MySQL username
+        String password = "1100339352"; // Replace with your MySQL password
+        int id = 0;
         PreparedStatement prepStmt1 = null;
         PreparedStatement prepStmt2 = null;
         PreparedStatement prepStmt3 = null;
+        PreparedStatement prepStmt4 = null;
+        PreparedStatement prepStmt41 = null;
+        PreparedStatement prepStmt42 = null;
+        PreparedStatement prepStmt43 = null;
+        PreparedStatement prepStmt44 = null;
+        PreparedStatement prepStmt45 = null;
 
         Map<String, String> Mood = new HashMap<>();
         Mood.put("Curious", "Documentary");
@@ -82,7 +89,8 @@ public class TermProject {
                 "m.name AS movie_name, " +
                 "d.first_name AS director_fn, " +
                 "d.last_name AS director_ln, " +
-                "m.rank AS ranked " +
+                "m.rank AS ranked, "
+                + "m.id AS id " +
                 "from " +
                 "movies m, " +
                 "movies_directors md, " +
@@ -167,6 +175,54 @@ public class TermProject {
                 "m.rank DESC " +
                 "LIMIT 3 " +
                 ")";
+        
+        String query4 = "SELECT id FROM movies WHERE name = ? LIMIT 1;";
+        
+        String query41 = "SELECT first_name, last_name, role "
+        		+ "FROM roles, actors "
+        		+ "WHERE roles.movie_id = ? "
+        		+ "AND actors.id = roles.actor_id "
+        		+ "ORDER BY RAND() "
+        		+ "LIMIT 1;";
+        
+        String query42 = "SELECT CONCAT(a.first_name, ' ', a.last_name) AS fullname, COUNT(mr.movie_id) AS total_roles "
+        		+ "FROM roles mr "
+        		+ "JOIN actors a ON mr.actor_id = a.id "
+        		+ "WHERE a.id IN ("
+        		+ "    SELECT DISTINCT mr.actor_id "
+        		+ "    FROM roles mr "
+        		+ "    WHERE mr.movie_id = ? "
+        		+ ") "
+        		+ "GROUP BY fullname "
+        		+ "ORDER BY total_roles DESC "
+        		+ "LIMIT 1;";
+        
+        String query43 = "WITH specified_movie_genres AS ("
+        		+ "    SELECT mg.genre "
+        		+ "    FROM movies_genres mg "
+        		+ "    JOIN movies m ON mg.movie_id = m.id "
+        		+ "    WHERE m.id = ? "
+        		+ ") "
+        		+ "SELECT COUNT(DISTINCT m.id) AS total_count "
+        		+ "FROM movies m "
+        		+ "JOIN movies_genres mg ON m.id = mg.movie_id "
+        		+ "WHERE NOT EXISTS ( "
+        		+ "    SELECT 1 "
+        		+ "    FROM movies_genres mg2 "
+        		+ "    WHERE mg2.movie_id = m.id "
+        		+ "    AND mg2.genre NOT IN (SELECT genre FROM specified_movie_genres) "
+        		+ ")"
+        		+ "AND m.id != ?;";
+        
+        String query44 = "SELECT ROUND((SELECT COUNT(*) "
+        		+ "FROM movies "
+        		+ "WHERE `rank` < (SELECT `rank` FROM movies WHERE id = ?)) / "
+        		+ "(SELECT COUNT(*) FROM movies WHERE `rank` IS NOT NULL) * 100, 2) AS c;";
+        
+        String query45 = "SELECT ROUND((SELECT COUNT(*) * 100 from actors, roles "
+        		+ "WHERE roles.movie_id = ? AND gender = 'F' AND actors.id = roles.actor_id) / (SELECT COUNT(*) FROM actors, roles "
+        		+ "WHERE roles.movie_id = ? AND actors.id = roles.actor_id),2) AS pct;";
+
 
         Scanner scan = new Scanner (System.in);
         System.out.println();
@@ -175,12 +231,16 @@ public class TermProject {
 
 
         try {
-            Connection connection = DriverManager.getConnection(url, username, password);
+            //Connection connection = DriverManager.getConnection(url, username, password);
+        	Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/imdb", "root", "");
             //Statement stmt = conn.createStatement();
             prepStmt1 = connection.prepareStatement(query1);
             //ResultSet rs = prepStmt1.executeQuery(query1);
 
-            System.out.println("Welcome to the movie recommendation/exploration app! Enter a mood, we can find movies based off that. (Curious, Briefly Engaging, Lighthearted, Tense, Rugged, Heartwarming, Imaginative, Intense, Affectionate, Intrigued, Edgy, Provocative, Rhythmic, Excited, Wondrous, Futuristic, Fearful, Solemn, Upbeat, Adventurous, Moody)");
+            System.out.println("Welcome to the movie recommendation/exploration app! Enter a mood, we can find movies based off that.");
+            System.out.println("(Curious, Briefly Engaging, Lighthearted, Tense, Rugged, Heartwarming, Imaginative, \n"
+            		+ "Intense, Affectionate, Intrigued, Edgy, Provocative, Rhythmic, Excited, Wondrous, Futuristic, \n"
+            		+ "Fearful, Solemn, Upbeat, Adventurous, Moody)");
             String mood_input = scan.nextLine().trim();
             String genre_input = Mood.get(mood_input);
 
@@ -214,7 +274,10 @@ public class TermProject {
 
                     System.out.println(" Number Of Movies: " + numOfMovies + " Director: " + directorFirstName + " " + directorLastName + " Actors: " + actorFirstName + " " + actorLastName + " Genre: " + genre);
                 }
+
+
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -304,6 +367,7 @@ public class TermProject {
             Connection connection = DriverManager.getConnection(url, username, password);
             //Statement stmt = conn.createStatement();
             prepStmt2 = connection.prepareStatement(query2);
+            prepStmt4 = connection.prepareStatement(query4);
             //ResultSet rs = prepStmt1.executeQuery(query1);
 
             System.out.println("Enter a movie name:");
@@ -311,6 +375,7 @@ public class TermProject {
 
             prepStmt2.setString(1, movie_name_input);
             prepStmt2.setString(2, movie_name_input);
+            prepStmt4.setString(1, movie_name_input);
 
             // Here, i am changing up the response, so it is different every time.
             System.out.println();
@@ -324,28 +389,132 @@ public class TermProject {
             System.out.println();
             // response generator
 
-            ResultSet rs = prepStmt2.executeQuery();
+            ResultSet rs1 = prepStmt2.executeQuery();
 
             // Check if the result set is empty
-            if (!rs.isBeforeFirst()) {
+            if (!rs1.isBeforeFirst()) {
                 System.out.println("Error: The movie does not exist in the database.");
             } else {
                 // Process and display the results
-                while (rs.next()) {
-                    String movieName = rs.getString("movie_name");
-                    String directorFirstName = rs.getString("director_fn");
-                    String directorLastName = rs.getString("director_ln");
-                    float rank = rs.getFloat("ranked");
-
+                while (rs1.next()) {
+                    String movieName = rs1.getString("movie_name");
+                    String directorFirstName = rs1.getString("director_fn");
+                    String directorLastName = rs1.getString("director_ln");
+                    float rank = rs1.getFloat("ranked");
+                    
                     System.out.println(" Movie: " +  movieName + " Director: " + directorFirstName + " " +  directorLastName + " rank: " +  rank);
                 }
             }
             System.out.println();
-            System.out.println("I hope you learned about some directors/actor, and found some movies you liked!");
+            
+            // Find entered movie id
+            ResultSet rs2 = prepStmt4.executeQuery();
+            if (!rs2.isBeforeFirst()) {
+                //System.out.println("Error: The movie does not exist in the database.");
+            } else {
+                // Process and display the results
+                while (rs2.next()) {
+                    id = rs2.getInt("id");
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        
+        System.out.println();
+        System.out.println(" S U B Q U E R I E S ");
+        System.out.println();
+
+
+        try{
+            Connection connection = DriverManager.getConnection(url, username, password);
+            prepStmt41 = connection.prepareStatement(query41);
+            prepStmt42 = connection.prepareStatement(query42);
+            prepStmt43 = connection.prepareStatement(query43);
+            prepStmt44 = connection.prepareStatement(query44);
+            prepStmt45 = connection.prepareStatement(query45);
+
+            System.out.println("Fun facts about the movie you selected:");
+
+            prepStmt41.setInt(1, id);
+            prepStmt42.setInt(1, id);
+            prepStmt43.setInt(1, id);
+            prepStmt43.setInt(2, id);
+            prepStmt44.setInt(1, id);
+            prepStmt45.setInt(1, id);
+            prepStmt45.setInt(2, id);
+
+            // Random actor and role
+            ResultSet rs1 = prepStmt41.executeQuery();
+            if (!rs1.isBeforeFirst()) {
+                System.out.println("Error: The movie does not exist in the database.");
+            } else {
+                while (rs1.next()) {
+                    String fname = rs1.getString("first_name");
+                    String lname = rs1.getString("last_name");
+                    String role = rs1.getString("role");
+                    System.out.println(fname + " " + lname + " stars as " + role + ".");
+                }
+            }
+            
+            // Most prolific actor in the movie
+            ResultSet rs2 = prepStmt42.executeQuery();
+            if (!rs2.isBeforeFirst()) {
+                System.out.println("Error: The movie does not exist in the database.");
+            } else {
+                while (rs2.next()) {
+                    String fullname = rs2.getString("fullname");
+                    int tr = rs2.getInt("total_roles") - 1;
+                    System.out.println(fullname + " is the most prolific actor in the movie, starring in " + tr + 
+                    		" other movies.");
+                }
+            }
+            
+            // Number of movies with genres
+            ResultSet rs3 = prepStmt43.executeQuery();
+            if (!rs3.isBeforeFirst()) {
+                System.out.println("Error: The movie does not exist in the database.");
+            } else {
+                while (rs3.next()) {
+                    int tc = rs3.getInt("total_count");
+                    System.out.println("There are "+ tc + " movies in the database with the same combination of genres."
+                    		+ " So many possibilities!");
+                }
+            }
+            
+            ResultSet rs4 = prepStmt44.executeQuery();
+            if (!rs4.isBeforeFirst()) {
+                System.out.println("Error: The movie does not exist in the database.");
+            } else {
+                while (rs4.next()) {
+                    int c = rs4.getInt("c");
+                    if (c >= 65) {
+                    	System.out.println("This movie is rated higher than " + c + "% of movies. It must be pretty good!");
+                    } else if (c >= 40) {
+                    	System.out.println("This movie is rated higher than " + c + "% of movies. Meh.");
+                    } else {
+                    	System.out.println("This movie is rated higher than " + c + "% of movies. Oof.");
+                    }
+                }
+            }
+            
+            ResultSet rs5 = prepStmt45.executeQuery();
+            if (!rs5.isBeforeFirst()) {
+                System.out.println("Error: The movie does not exist in the database.");
+            } else {
+                while (rs5.next()) {
+                    int pct = rs5.getInt("pct");
+                    System.out.println(pct + "% of stars in this movie are female.");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 }

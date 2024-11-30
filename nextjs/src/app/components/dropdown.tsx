@@ -1,44 +1,20 @@
-import React, { useReducer } from "react";
-import { DropdownOptionItem } from "./dropdownItem";
-import iconDefault from "./icon.svg";
-import iconHover from "./image.svg";
-import iconOpen from "./icon-2.svg";
-import styles from "./dropdown.module.css";
+"use client";
 
-type DropdownState = "default" | "hover" | "open";
+import React, { useState } from "react";
+import styles from "./dropdown.module.css";
 
 interface DropdownProps {
   className?: string;
+  onSelect: (selectedMood: string) => void; // New prop for passing the selected mood to parent component
 }
 
-interface DropdownAction {
-  type: "MOUSE_ENTER" | "MOUSE_LEAVE" | "CLICK" | "CLOSE";
-}
-
-const reducer = (state: DropdownState, action: DropdownAction): DropdownState => {
-  switch (state) {
-    case "default":
-      if (action.type === "MOUSE_ENTER") return "hover";
-      break;
-    case "hover":
-      if (action.type === "MOUSE_LEAVE") return "default";
-      if (action.type === "CLICK") return "open";
-      break;
-    case "open":
-      if (action.type === "CLOSE") return "default";
-      break;
-    default:
-      return state;
-  }
-  return state;
-};
-
-export const Dropdown: React.FC<DropdownProps> = ({ className }) => {
-  const [state, dispatch] = useReducer(reducer, "default");
+export const Dropdown: React.FC<DropdownProps> = ({ className, onSelect }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const optionItems = [
     "Curious",
-    "Briefly Engaged",
+    "Briefly Engaging",
     "Lighthearted",
     "Tense",
     "Rugged",
@@ -50,7 +26,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ className }) => {
     "Provocative",
     "Rhythmic",
     "Excited",
-    "Wonderous",
+    "Wondrous",
     "Futuristic",
     "Fearful",
     "Solemn",
@@ -59,37 +35,39 @@ export const Dropdown: React.FC<DropdownProps> = ({ className }) => {
     "Moody",
   ];
 
+  const handleToggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleSelectItem = (item: string) => {
+    setSelectedItem(item);
+    setIsOpen(false);
+    onSelect(item); // Pass the selected mood to the parent component
+  };
+
   return (
-    <div
-      className={`${styles.dropdown} ${styles[state]} ${className}`}
-      onMouseEnter={() => dispatch({ type: "MOUSE_ENTER" })}
-      onMouseLeave={() => dispatch({ type: "MOUSE_LEAVE" })}
-    >
-      <button
-        className={styles.button}
-        onClick={() =>
-          state === "open"
-            ? dispatch({ type: "CLOSE" })
-            : dispatch({ type: "CLICK" })
-        }
-      >
-        <span className={styles.label}>I'm feeling...</span>
-        <img
-          className={styles.icon}
-          src={state === "hover" ? iconHover : state === "open" ? iconOpen : iconDefault}
-          alt="Dropdown Icon"
-        />
+    <div className={`${styles.dropdown} ${className || ""}`}>
+      <button className={styles.button} onClick={handleToggleDropdown}>
+        <span className={styles.label}>
+          {selectedItem ? selectedItem : "I'm feeling..."}
+        </span>
+        <span className={styles.arrow}>
+          {isOpen ? "▲" : "▼"} {/* Show different arrows depending on dropdown state */}
+        </span>
       </button>
-      {state === "open" && (
-        <div className={styles["list-of-items"]}>
+
+      {isOpen && (
+        <ul className={styles.list}>
           {optionItems.map((item) => (
-            <DropdownOptionItem
+            <li
               key={item}
-              className={styles["dropdown-option-item-instance"]}
-              text={item}
-            />
+              className={styles.item}
+              onClick={() => handleSelectItem(item)}
+            >
+              {item}
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
